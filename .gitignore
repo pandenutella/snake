@@ -1,2 +1,5 @@
+.gradle
 .idea
 build
+gradle-app.setting
+local.properties
