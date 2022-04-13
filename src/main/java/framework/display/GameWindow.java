@@ -1,4 +1,4 @@
-package window;
+package framework.display;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,12 +11,13 @@ import java.awt.Container;
 public class GameWindow extends JFrame {
 
     private GameScreen gameScreen;
+    private String gameName;
 
     public void initialize() {
         Container contentPane = getContentPane();
         contentPane.add(gameScreen);
 
-        setTitle("Snake - pandenutella");
+        setTitle(gameName);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(700, 700);
         setResizable(false);

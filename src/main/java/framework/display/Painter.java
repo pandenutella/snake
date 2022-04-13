@@ -1,4 +1,4 @@
-package window;
+package framework.display;
 
 import java.awt.Graphics;
 

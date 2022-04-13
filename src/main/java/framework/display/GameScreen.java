@@ -1,10 +1,9 @@
-package window;
+package framework.display;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.swing.JPanel;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -27,6 +26,7 @@ public class GameScreen extends JPanel {
         g.setColor(BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        paintManager.getPainterList().forEach(painter -> painter.paint(g));
+        for (PaintLevel paintLevel : PaintLevel.values())
+            paintManager.getPainterMap().get(paintLevel).forEach(painter -> painter.paint(g));
     }
 }
