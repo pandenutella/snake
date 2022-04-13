@@ -1,26 +1,14 @@
 package implementation.factory;
 
+import framework.factory.ViewFactory;
 import framework.view.View;
 import implementation.view.PlayView;
 import implementation.view.StartView;
-import lombok.NoArgsConstructor;
 
 import static implementation.constants.ViewConstants.PLAY;
 import static implementation.constants.ViewConstants.START;
-import static java.util.Objects.isNull;
-import static lombok.AccessLevel.PRIVATE;
 
-@NoArgsConstructor(access = PRIVATE)
-public class ViewFactory {
-
-    private static ViewFactory INSTANCE;
-
-    public static ViewFactory getInstance() {
-        if (isNull(INSTANCE))
-            INSTANCE = new ViewFactory();
-
-        return INSTANCE;
-    }
+public class SnakeViewFactory implements ViewFactory {
 
     public View getView(String id) {
         switch (id) {

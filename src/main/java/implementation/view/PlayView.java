@@ -3,11 +3,13 @@ package implementation.view;
 import framework.control.Controllable;
 import framework.display.PaintUtility;
 import framework.view.View;
+import implementation.snake.Snake;
 import lombok.Getter;
 
 import java.awt.Graphics;
 import java.util.List;
 
+import static framework.display.PaintLevel.ENTITY;
 import static java.awt.Color.WHITE;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static java.util.Collections.singletonList;
@@ -18,12 +20,17 @@ public class PlayView extends View implements Controllable {
     private PaintUtility paintUtility;
     private boolean paused;
 
+    private Snake snake;
+
     @Override
     public void mount() {
         paintUtility = PaintUtility.getInstance();
         getControllerManager().addControllable(this);
 
         paused = false;
+        snake = new Snake(7, 7, 3);
+
+        getPaintManager().addPainter(ENTITY, snake);
     }
 
     @Override
@@ -32,6 +39,9 @@ public class PlayView extends View implements Controllable {
         getControllerManager().removeControllable(this);
 
         paused = false;
+        snake = null;
+
+        getPaintManager().removePainter(ENTITY, snake);
     }
 
     @Override

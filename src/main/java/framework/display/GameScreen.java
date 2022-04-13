@@ -16,7 +16,7 @@ public class GameScreen extends JPanel {
     private PaintManager paintManager;
 
     public GameScreen() {
-        setPreferredSize(new Dimension(700, 700));
+        setPreferredSize(new Dimension(450, 450));
     }
 
     @Override

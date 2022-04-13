@@ -2,7 +2,7 @@ package framework.view;
 
 import framework.control.ControllerManager;
 import framework.display.PaintManager;
-import implementation.factory.ViewFactory;
+import framework.factory.ViewFactory;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -20,15 +20,17 @@ public class ViewManager {
     private PaintManager paintManager;
     private ControllerManager controllerManager;
     private String selectedViewName;
+    private ViewFactory viewFactory;
 
     public void setViews(List<String> viewNameList) {
         viewNameList.forEach(viewName -> {
-            View view = ViewFactory.getInstance().getView(viewName);
+            View view = viewFactory.getView(viewName);
 
             if (isNull(view))
                 return;
 
             view.setViewManager(this);
+            view.setPaintManager(paintManager);
             view.setControllerManager(controllerManager);
 
             viewMap.put(viewName, view);

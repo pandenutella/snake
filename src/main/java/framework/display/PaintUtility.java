@@ -60,4 +60,13 @@ public class PaintUtility {
         g.drawString(text, x, y);
         g.setColor(initialColor);
     }
+
+    public void fillRect(Graphics g, int x, int y, int width, int height, Color color) {
+        Color initialColor = g.getColor();
+        g.setColor(color);
+
+        g.fillRect(x, y, width, height);
+
+        g.setColor(initialColor);
+    }
 }

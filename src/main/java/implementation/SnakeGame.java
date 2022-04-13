@@ -1,6 +1,7 @@
 package implementation;
 
 import framework.Game;
+import implementation.factory.SnakeViewFactory;
 
 import static implementation.constants.ViewConstants.PLAY;
 import static implementation.constants.ViewConstants.START;
@@ -13,6 +14,7 @@ public class SnakeGame {
         game.setName("Snake - pandenutella");
         game.initialize();
 
+        game.getViewManager().setViewFactory(new SnakeViewFactory());
         game.getViewManager().setViews(asList(START, PLAY));
         game.getViewManager().goToView(START);
 
