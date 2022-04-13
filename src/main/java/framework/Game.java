@@ -1,5 +1,6 @@
 package framework;
 
+import framework.control.ControllerManager;
 import framework.display.GameScreen;
 import framework.display.GameWindow;
 import framework.display.PaintManager;
@@ -9,6 +10,7 @@ import static java.lang.Thread.sleep;
 
 public class Game {
 
+    private String name;
     private GameScreen gameScreen;
     private ViewManager viewManager;
 
@@ -18,12 +20,16 @@ public class Game {
         gameScreen = new GameScreen();
         gameScreen.setPaintManager(paintManager);
 
+        ControllerManager controllerManager = new ControllerManager();
+
         GameWindow gameWindow = new GameWindow();
-        gameWindow.setGameName("Snake - pandenutella");
+        gameWindow.setGameName(name);
         gameWindow.setGameScreen(gameScreen);
+        gameWindow.setControllerManager(controllerManager);
 
         viewManager = new ViewManager();
         viewManager.setPaintManager(paintManager);
+        viewManager.setControllerManager(controllerManager);
 
         gameWindow.initialize();
     }
@@ -39,6 +45,10 @@ public class Game {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ViewManager getViewManager() {

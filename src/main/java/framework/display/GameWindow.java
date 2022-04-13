@@ -1,5 +1,6 @@
 package framework.display;
 
+import framework.control.ControllerManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,6 +13,7 @@ public class GameWindow extends JFrame {
 
     private GameScreen gameScreen;
     private String gameName;
+    private ControllerManager controllerManager;
 
     public void initialize() {
         Container contentPane = getContentPane();
@@ -22,6 +24,7 @@ public class GameWindow extends JFrame {
         setSize(700, 700);
         setResizable(false);
         setLocationRelativeTo(null);
+        addKeyListener(controllerManager);
 
         pack();
         setVisible(true);

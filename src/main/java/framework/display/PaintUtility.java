@@ -22,6 +22,22 @@ public class PaintUtility {
         return INSTANCE;
     }
 
+    public void drawTitle(Graphics g, String title, int level, int x, int y, Color color) {
+        Color initialColor = g.getColor();
+        Font initialFont = g.getFont();
+
+        int fontSize = 72 - (8 * (level - 1));
+        Font font = new Font(initialFont.getFontName(), BOLD, fontSize);
+
+        g.setColor(color);
+        g.setFont(font);
+
+        g.drawString(title, x, y);
+
+        g.setColor(initialColor);
+        g.setFont(initialFont);
+    }
+
     public void drawTitle(Graphics g, String title, int x, int y, Color color) {
         Color initialColor = g.getColor();
         Font initialFont = g.getFont();
