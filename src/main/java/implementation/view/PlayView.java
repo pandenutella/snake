@@ -13,7 +13,8 @@ import static framework.display.PaintLevel.ENTITY;
 import static java.awt.Color.BLACK;
 import static java.awt.Color.RED;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
-import static java.util.Collections.singletonList;
+import static java.awt.event.KeyEvent.VK_SPACE;
+import static java.util.Arrays.asList;
 
 @Getter
 public class PlayView extends View implements Controllable {
@@ -30,10 +31,7 @@ public class PlayView extends View implements Controllable {
 
         paused = false;
 
-        snake = new Snake(7, 7, 4);
-        getPaintManager().addPainter(ENTITY, snake);
-        getUpdateManager().addUpdatable(snake);
-        getControllerManager().addControllable(snake);
+        createSnake();
     }
 
     @Override
@@ -43,39 +41,54 @@ public class PlayView extends View implements Controllable {
 
         paused = false;
 
-        getControllerManager().removeControllable(snake);
-        getUpdateManager().removeUpdatable(snake);
-        getPaintManager().removePainter(ENTITY, snake);
-        snake = null;
+        destroySnake();
     }
 
     @Override
     public void paint(Graphics g) {
-        if (!paused)
-            return;
-
-        paintUtility.drawTitle(g, "Paused", 4, 100, 150, RED);
-        paintUtility.drawText(g, "Press [ESCAPE] to resume", 100, 175, BLACK);
+        if (!snake.isAlive()) {
+            paintUtility.drawTitle(g, "Game Over", 4, 100, 150, RED);
+            paintUtility.drawText(g, "Press [SPACE] to play again", 100, 175, BLACK);
+        } else if (paused) {
+            paintUtility.drawTitle(g, "Paused", 4, 100, 150, RED);
+            paintUtility.drawText(g, "Press [ESCAPE] to resume", 100, 175, BLACK);
+        }
     }
 
     @Override
     public List<Integer> getListenedKeyCodes() {
-        return singletonList(VK_ESCAPE);
+        return asList(VK_ESCAPE, VK_SPACE);
     }
 
     @Override
     public void performAction(int keyCode) {
-        if (keyCode != VK_ESCAPE)
-            return;
-
-        if (!paused) {
-            getControllerManager().removeControllable(snake);
-            getUpdateManager().removeUpdatable(snake);
-            paused = true;
-        } else {
-            getUpdateManager().addUpdatable(snake);
-            getControllerManager().addControllable(snake);
-            paused = false;
+        if (!snake.isAlive() && keyCode == VK_SPACE) {
+            destroySnake();
+            createSnake();
+        } else if (snake.isAlive() && keyCode == VK_ESCAPE) {
+            if (!paused) {
+                getControllerManager().removeControllable(snake);
+                getUpdateManager().removeUpdatable(snake);
+                paused = true;
+            } else {
+                getUpdateManager().addUpdatable(snake);
+                getControllerManager().addControllable(snake);
+                paused = false;
+            }
         }
+    }
+
+    private void createSnake() {
+        snake = new Snake(7, 7, 5);
+        getPaintManager().addPainter(ENTITY, snake);
+        getUpdateManager().addUpdatable(snake);
+        getControllerManager().addControllable(snake);
+    }
+
+    private void destroySnake() {
+        getControllerManager().removeControllable(snake);
+        getUpdateManager().removeUpdatable(snake);
+        getPaintManager().removePainter(ENTITY, snake);
+        snake = null;
     }
 }

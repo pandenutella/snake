@@ -28,6 +28,9 @@ public class Snake implements Updatable, Painter, Controllable {
 
     private final static int BLOCK_SIZE = 30;
 
+    private boolean alive = true;
+    private Direction nextDirection = UP;
+
     public Snake(int x, int y, int length) {
         snakeHead = new SnakeHead();
         snakeHead.setDirection(UP);
@@ -46,6 +49,9 @@ public class Snake implements Updatable, Painter, Controllable {
 
     @Override
     public void update() {
+        if (!alive)
+            return;
+
         for (int i = snakeBodyList.size() - 1; i >= 0; i--) {
             SnakeBody snakeBody = snakeBodyList.get(i);
 
@@ -58,7 +64,24 @@ public class Snake implements Updatable, Painter, Controllable {
             snakeBody.moveTo(nextSnakeBody.getX(), nextSnakeBody.getY());
         }
 
+        if (isNextDirectionValid(snakeHead.getDirection(), nextDirection))
+            snakeHead.setDirection(nextDirection);
+        else
+            nextDirection = snakeHead.getDirection();
+
         snakeHead.moveTowardsDirection(BLOCK_SIZE);
+
+        boolean collided = false;
+        for (SnakeBody body : snakeBodyList) {
+            if (!(body.getX() == snakeHead.getX() && body.getY() == snakeHead.getY()))
+                continue;
+
+            collided = true;
+            break;
+        }
+
+        if (collided)
+            alive = false;
     }
 
     @Override
@@ -76,11 +99,10 @@ public class Snake implements Updatable, Painter, Controllable {
 
     @Override
     public void performAction(int keyCode) {
-        Direction nextDirection = getDirectionFromKeyCode(keyCode);
-        if (!isNextDirectionValid(snakeHead.getDirection(), nextDirection))
+        if (!alive)
             return;
 
-        snakeHead.setDirection(nextDirection);
+        nextDirection = getDirectionFromKeyCode(keyCode);
     }
 
     public Direction getDirectionFromKeyCode(int keyCode) {
@@ -101,5 +123,9 @@ public class Snake implements Updatable, Painter, Controllable {
         else if (direction == DOWN && nextDirection != UP)
             return true;
         else return direction == LEFT && nextDirection != RIGHT;
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }

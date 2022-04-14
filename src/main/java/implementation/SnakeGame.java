@@ -12,7 +12,7 @@ public class SnakeGame {
     public SnakeGame() {
         Game game = new Game();
         game.setName("Snake - pandenutella");
-        game.setFps(5);
+        game.setFps(10);
         game.initialize();
 
         game.getViewManager().setViewFactory(new SnakeViewFactory());
