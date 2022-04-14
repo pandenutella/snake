@@ -24,9 +24,18 @@ public class Apple implements Updatable, Painter {
     }
 
     public void spawn() {
-        Random random = new Random();
-        col = random.nextInt(15);
-        row = random.nextInt(15);
+        while (true) {
+            Random random = new Random();
+            int newCol = random.nextInt(15);
+            int newRow = random.nextInt(15);
+
+            if (col == newCol && row == newRow)
+                continue;
+
+            col = newCol;
+            row = newRow;
+            break;
+        }
     }
 
     @Override
