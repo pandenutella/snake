@@ -13,6 +13,7 @@ public class Game {
 
     private String name;
     private int fps = 60;
+    private int size = 450;
     private GameScreen gameScreen;
     private ViewManager viewManager;
     private UpdateManager updateManager;
@@ -22,7 +23,7 @@ public class Game {
         ControllerManager controllerManager = new ControllerManager();
         updateManager = new UpdateManager();
 
-        gameScreen = new GameScreen();
+        gameScreen = new GameScreen(size);
         gameScreen.setPaintManager(paintManager);
 
         GameWindow gameWindow = new GameWindow();
@@ -53,6 +54,10 @@ public class Game {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public void setFps(int fps) {

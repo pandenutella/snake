@@ -1,9 +1,10 @@
-package implementation.snake;
+package implementation.entity.snake;
 
 import framework.control.Controllable;
 import framework.control.Updatable;
 import framework.display.Painter;
 import implementation.constants.Direction;
+import implementation.entity.apple.Apple;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import static implementation.constants.Direction.DOWN;
 import static implementation.constants.Direction.LEFT;
 import static implementation.constants.Direction.RIGHT;
 import static implementation.constants.Direction.UP;
+import static implementation.constants.GameConstants.BLOCK_SIZE;
 import static java.awt.Color.BLACK;
 import static java.awt.Color.RED;
 import static java.awt.event.KeyEvent.VK_A;
@@ -26,22 +28,21 @@ public class Snake implements Updatable, Painter, Controllable {
     private final SnakeHead snakeHead;
     private final List<SnakeBody> snakeBodyList;
 
-    private final static int BLOCK_SIZE = 30;
-
     private boolean alive = true;
+    private boolean willGrow = false;
     private Direction nextDirection = UP;
 
-    public Snake(int x, int y, int length) {
+    public Snake(int col, int row, int length) {
         snakeHead = new SnakeHead();
         snakeHead.setDirection(UP);
-        snakeHead.setX(x * BLOCK_SIZE);
-        snakeHead.setY(y * BLOCK_SIZE);
+        snakeHead.setCol(col);
+        snakeHead.setRow(row);
 
         snakeBodyList = new ArrayList<>();
         for (int i = 1; i < length; i++) {
             SnakeBody snakeBody = new SnakeBody();
-            snakeBody.setX(x * BLOCK_SIZE);
-            snakeBody.setY((y + i) * BLOCK_SIZE);
+            snakeBody.setCol(col);
+            snakeBody.setRow((row + i));
 
             snakeBodyList.add(snakeBody);
         }
@@ -52,28 +53,41 @@ public class Snake implements Updatable, Painter, Controllable {
         if (!alive)
             return;
 
-        for (int i = snakeBodyList.size() - 1; i >= 0; i--) {
+        if (willGrow) {
+            SnakeBody tail = snakeBodyList.get(snakeBodyList.size() - 1);
+
+            SnakeBody snakeBody = new SnakeBody();
+            snakeBody.setCol(tail.getCol());
+            snakeBody.setRow(tail.getRow());
+
+            snakeBodyList.add(snakeBody);
+        }
+
+        int tailIndex = snakeBodyList.size() - (willGrow ? 2 : 1);
+        for (int i = tailIndex; i >= 0; i--) {
             SnakeBody snakeBody = snakeBodyList.get(i);
 
             if (i == 0) {
-                snakeBody.moveTo(snakeHead.getX(), snakeHead.getY());
+                snakeBody.moveTo(snakeHead.getCol(), snakeHead.getRow());
                 continue;
             }
 
             SnakeBody nextSnakeBody = snakeBodyList.get(i - 1);
-            snakeBody.moveTo(nextSnakeBody.getX(), nextSnakeBody.getY());
+            snakeBody.moveTo(nextSnakeBody.getCol(), nextSnakeBody.getRow());
         }
+
+        willGrow = false;
 
         if (isNextDirectionValid(snakeHead.getDirection(), nextDirection))
             snakeHead.setDirection(nextDirection);
         else
             nextDirection = snakeHead.getDirection();
 
-        snakeHead.moveTowardsDirection(BLOCK_SIZE);
+        snakeHead.moveTowardsDirection();
 
         boolean collided = false;
         for (SnakeBody body : snakeBodyList) {
-            if (!(body.getX() == snakeHead.getX() && body.getY() == snakeHead.getY()))
+            if (!(body.getCol() == snakeHead.getCol() && body.getRow() == snakeHead.getRow()))
                 continue;
 
             collided = true;
@@ -86,9 +100,9 @@ public class Snake implements Updatable, Painter, Controllable {
 
     @Override
     public void paint(Graphics g) {
-        getInstance().fillRect(g, snakeHead.getX(), snakeHead.getY(), BLOCK_SIZE, BLOCK_SIZE, RED);
+        getInstance().fillRect(g, snakeHead.getCol() * BLOCK_SIZE, snakeHead.getRow() * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, RED);
         snakeBodyList.forEach(snakeBody -> {
-            getInstance().fillRect(g, snakeBody.getX(), snakeBody.getY(), BLOCK_SIZE, BLOCK_SIZE, BLACK);
+            getInstance().fillRect(g, snakeBody.getCol() * BLOCK_SIZE, snakeBody.getRow() * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, BLACK);
         });
     }
 
@@ -105,7 +119,15 @@ public class Snake implements Updatable, Painter, Controllable {
         nextDirection = getDirectionFromKeyCode(keyCode);
     }
 
-    public Direction getDirectionFromKeyCode(int keyCode) {
+    public boolean canEatApple(Apple apple) {
+        return apple.getCol() == snakeHead.getCol() && apple.getRow() == snakeHead.getRow();
+    }
+
+    public void grow() {
+        willGrow = true;
+    }
+
+    private Direction getDirectionFromKeyCode(int keyCode) {
         return switch (keyCode) {
             case VK_W -> UP;
             case VK_D -> RIGHT;
@@ -115,7 +137,7 @@ public class Snake implements Updatable, Painter, Controllable {
         };
     }
 
-    public boolean isNextDirectionValid(Direction direction, Direction nextDirection) {
+    private boolean isNextDirectionValid(Direction direction, Direction nextDirection) {
         if (direction == UP && nextDirection != DOWN)
             return true;
         else if (direction == RIGHT && nextDirection != LEFT)

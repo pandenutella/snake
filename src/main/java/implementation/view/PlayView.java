@@ -1,15 +1,18 @@
 package implementation.view;
 
 import framework.control.Controllable;
+import framework.control.Updatable;
+import framework.control.UpdateLevel;
+import framework.display.PaintLevel;
 import framework.display.PaintUtility;
 import framework.view.View;
-import implementation.snake.Snake;
+import implementation.entity.apple.Apple;
+import implementation.entity.snake.Snake;
 import lombok.Getter;
 
 import java.awt.Graphics;
 import java.util.List;
 
-import static framework.display.PaintLevel.ENTITY;
 import static java.awt.Color.BLACK;
 import static java.awt.Color.RED;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
@@ -17,12 +20,13 @@ import static java.awt.event.KeyEvent.VK_SPACE;
 import static java.util.Arrays.asList;
 
 @Getter
-public class PlayView extends View implements Controllable {
+public class PlayView extends View implements Updatable, Controllable {
 
     private PaintUtility paintUtility;
     private boolean paused;
 
     private Snake snake;
+    private Apple apple;
 
     @Override
     public void mount() {
@@ -32,16 +36,30 @@ public class PlayView extends View implements Controllable {
         paused = false;
 
         createSnake();
+        createApple();
+
+        getUpdateManager().addUpdatable(UpdateLevel.VIEW, this);
     }
 
     @Override
     public void unmount() {
+        getUpdateManager().removeUpdatable(UpdateLevel.VIEW, this);
         paintUtility = null;
         getControllerManager().removeControllable(this);
 
         paused = false;
 
         destroySnake();
+        destroyApple();
+    }
+
+    @Override
+    public void update() {
+        if (!snake.canEatApple(apple))
+            return;
+
+        snake.grow();
+        apple.spawn();
     }
 
     @Override
@@ -64,14 +82,16 @@ public class PlayView extends View implements Controllable {
     public void performAction(int keyCode) {
         if (!snake.isAlive() && keyCode == VK_SPACE) {
             destroySnake();
+            destroyApple();
             createSnake();
+            createApple();
         } else if (snake.isAlive() && keyCode == VK_ESCAPE) {
             if (!paused) {
                 getControllerManager().removeControllable(snake);
-                getUpdateManager().removeUpdatable(snake);
+                getUpdateManager().removeUpdatable(UpdateLevel.ENTITY, snake);
                 paused = true;
             } else {
-                getUpdateManager().addUpdatable(snake);
+                getUpdateManager().addUpdatable(UpdateLevel.ENTITY, snake);
                 getControllerManager().addControllable(snake);
                 paused = false;
             }
@@ -79,16 +99,28 @@ public class PlayView extends View implements Controllable {
     }
 
     private void createSnake() {
-        snake = new Snake(7, 7, 5);
-        getPaintManager().addPainter(ENTITY, snake);
-        getUpdateManager().addUpdatable(snake);
+        snake = new Snake(7, 7, 3);
+        getPaintManager().addPainter(PaintLevel.ENTITY, snake);
+        getUpdateManager().addUpdatable(UpdateLevel.ENTITY, snake);
         getControllerManager().addControllable(snake);
     }
 
     private void destroySnake() {
         getControllerManager().removeControllable(snake);
-        getUpdateManager().removeUpdatable(snake);
-        getPaintManager().removePainter(ENTITY, snake);
+        getUpdateManager().removeUpdatable(UpdateLevel.ENTITY, snake);
+        getPaintManager().removePainter(PaintLevel.ENTITY, snake);
         snake = null;
+    }
+
+    private void createApple() {
+        apple = new Apple();
+        getPaintManager().addPainter(PaintLevel.ENTITY, apple);
+        getUpdateManager().addUpdatable(UpdateLevel.ENTITY, apple);
+    }
+
+    private void destroyApple() {
+        getUpdateManager().removeUpdatable(UpdateLevel.ENTITY, apple);
+        getPaintManager().removePainter(PaintLevel.ENTITY, apple);
+        apple = null;
     }
 }
