@@ -1,6 +1,7 @@
 package implementation.view;
 
 import framework.control.Controllable;
+import framework.control.Updatable;
 import framework.display.PaintUtility;
 import framework.view.View;
 import implementation.snake.Snake;
@@ -15,7 +16,7 @@ import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static java.util.Collections.singletonList;
 
 @Getter
-public class PlayView extends View implements Controllable {
+public class PlayView extends View implements Updatable, Controllable {
 
     private PaintUtility paintUtility;
     private boolean paused;
@@ -26,6 +27,7 @@ public class PlayView extends View implements Controllable {
     public void mount() {
         paintUtility = PaintUtility.getInstance();
         getControllerManager().addControllable(this);
+        getUpdateManager().addUpdatable(this);
 
         paused = false;
         snake = new Snake(7, 7, 3);
@@ -37,6 +39,7 @@ public class PlayView extends View implements Controllable {
     public void unmount() {
         paintUtility = null;
         getControllerManager().removeControllable(this);
+        getUpdateManager().removeUpdatable(this);
 
         paused = false;
         snake = null;
@@ -45,15 +48,20 @@ public class PlayView extends View implements Controllable {
     }
 
     @Override
-    public void update() {
+    public void paint(Graphics g) {
+        if (!paused)
+            return;
+
+        paintUtility.drawTitle(g, "Paused", 4, 100, 150, WHITE);
+        paintUtility.drawText(g, "Press [ESCAPE] to resume", 100, 175, WHITE);
     }
 
     @Override
-    public void paint(Graphics g) {
-        if (paused) {
-            paintUtility.drawTitle(g, "Paused", 4, 100, 150, WHITE);
-            paintUtility.drawText(g, "Press [ESCAPE] to resume", 100, 175, WHITE);
-        }
+    public void update() {
+        if (paused)
+            return;
+
+        System.out.println("Updating...");
     }
 
     @Override

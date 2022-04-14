@@ -1,6 +1,7 @@
 package framework.view;
 
 import framework.control.ControllerManager;
+import framework.control.UpdateManager;
 import framework.display.PaintManager;
 import framework.factory.ViewFactory;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class ViewManager {
 
     private PaintManager paintManager;
     private ControllerManager controllerManager;
+    private UpdateManager updateManager;
     private String selectedViewName;
     private ViewFactory viewFactory;
 
@@ -32,6 +34,7 @@ public class ViewManager {
             view.setViewManager(this);
             view.setPaintManager(paintManager);
             view.setControllerManager(controllerManager);
+            view.setUpdateManager(updateManager);
 
             viewMap.put(viewName, view);
         });
@@ -45,9 +48,5 @@ public class ViewManager {
 
         viewMap.get(selectedViewName).unmount();
         viewMap.get(viewName).mount();
-    }
-
-    public void update() {
-        viewMap.get(selectedViewName).update();
     }
 }

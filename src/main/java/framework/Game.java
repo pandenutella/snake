@@ -1,6 +1,7 @@
 package framework;
 
 import framework.control.ControllerManager;
+import framework.control.UpdateManager;
 import framework.display.GameScreen;
 import framework.display.GameWindow;
 import framework.display.PaintManager;
@@ -13,14 +14,15 @@ public class Game {
     private String name;
     private GameScreen gameScreen;
     private ViewManager viewManager;
+    private UpdateManager updateManager;
 
     public void initialize() {
         PaintManager paintManager = new PaintManager();
+        ControllerManager controllerManager = new ControllerManager();
+        updateManager = new UpdateManager();
 
         gameScreen = new GameScreen();
         gameScreen.setPaintManager(paintManager);
-
-        ControllerManager controllerManager = new ControllerManager();
 
         GameWindow gameWindow = new GameWindow();
         gameWindow.setGameName(name);
@@ -30,13 +32,14 @@ public class Game {
         viewManager = new ViewManager();
         viewManager.setPaintManager(paintManager);
         viewManager.setControllerManager(controllerManager);
+        viewManager.setUpdateManager(updateManager);
 
         gameWindow.initialize();
     }
 
     public void run() {
         while (true) {
-            viewManager.update();
+            updateManager.update();
             gameScreen.repaint();
 
             try {

@@ -31,10 +31,6 @@ public class StartView extends View implements Controllable {
     }
 
     @Override
-    public void update() {
-    }
-
-    @Override
     public void paint(Graphics g) {
         paintUtility.drawTitle(g, "SNAKE", 100, 150, WHITE);
         paintUtility.drawText(g, "Press [SPACE] to start", 100, 175, WHITE);
@@ -47,13 +43,10 @@ public class StartView extends View implements Controllable {
 
     @Override
     public void performAction(int keyCode) {
-        switch (keyCode) {
-            case VK_SPACE:
-                getControllerManager().removeControllable(this);
-                getViewManager().goToView(PLAY);
-                break;
-            default:
-                break;
-        }
+        if (keyCode != VK_SPACE)
+            return;
+
+        getControllerManager().removeControllable(this);
+        getViewManager().goToView(PLAY);
     }
 }
