@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
+import static implementation.constants.GameConstants.BLOCKS;
 import static implementation.constants.GameConstants.BLOCK_SIZE;
 import static java.awt.Color.DARK_GRAY;
 import static java.awt.Color.LIGHT_GRAY;
@@ -26,8 +27,8 @@ public class Apple implements Updatable, Painter {
     public void spawn() {
         while (true) {
             Random random = new Random();
-            int newCol = random.nextInt(15);
-            int newRow = random.nextInt(15);
+            int newCol = random.nextInt(BLOCKS);
+            int newRow = random.nextInt(BLOCKS);
 
             if (col == newCol && row == newRow)
                 continue;

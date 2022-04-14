@@ -18,6 +18,7 @@ import static java.awt.Color.RED;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static java.awt.event.KeyEvent.VK_SPACE;
 import static java.util.Arrays.asList;
+import static java.util.Objects.nonNull;
 
 @Getter
 public class PlayView extends View implements Updatable, Controllable {
@@ -55,7 +56,10 @@ public class PlayView extends View implements Updatable, Controllable {
 
     @Override
     public void update() {
-        if (!snake.canEatApple(apple))
+        if (!snake.isAlive())
+            return;
+
+        if (nonNull(apple) && !snake.canEatApple(apple))
             return;
 
         snake.grow();

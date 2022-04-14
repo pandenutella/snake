@@ -3,6 +3,8 @@ package implementation.entity.snake;
 import implementation.constants.Direction;
 import lombok.Data;
 
+import static implementation.constants.GameConstants.BLOCKS;
+
 @Data
 public class SnakeHead {
     private Direction direction;
@@ -28,13 +30,13 @@ public class SnakeHead {
         }
 
         if (row < 0)
-            row = 14;
-        else if (row > 14)
+            row = BLOCKS - 1;
+        else if (row > BLOCKS - 1)
             row = 0;
 
         if (col < 0)
-            col = 14;
-        else if (col > 14)
+            col = BLOCKS - 1;
+        else if (col > BLOCKS - 1)
             col = 0;
     }
 }
