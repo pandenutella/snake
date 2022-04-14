@@ -9,7 +9,8 @@ import java.awt.Graphics;
 import java.util.List;
 
 import static implementation.constants.ViewConstants.PLAY;
-import static java.awt.Color.WHITE;
+import static java.awt.Color.BLACK;
+import static java.awt.Color.RED;
 import static java.awt.event.KeyEvent.VK_SPACE;
 import static java.util.Collections.singletonList;
 
@@ -32,8 +33,8 @@ public class StartView extends View implements Controllable {
 
     @Override
     public void paint(Graphics g) {
-        paintUtility.drawTitle(g, "SNAKE", 100, 150, WHITE);
-        paintUtility.drawText(g, "Press [SPACE] to start", 100, 175, WHITE);
+        paintUtility.drawTitle(g, "SNAKE", 100, 150, RED);
+        paintUtility.drawText(g, "Press [SPACE] to start", 100, 175, BLACK);
     }
 
     @Override

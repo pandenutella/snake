@@ -3,6 +3,7 @@ package framework.control;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class ControllerManager implements KeyListener {
@@ -25,11 +26,14 @@ public class ControllerManager implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
-        for (Controllable controllable : controllableList) {
-            if (!controllable.getListenedKeyCodes().contains(keyCode))
-                continue;
+        try {
+            for (Controllable controllable : controllableList) {
+                if (!controllable.getListenedKeyCodes().contains(keyCode))
+                    continue;
 
-            controllable.performAction(keyCode);
+                controllable.performAction(keyCode);
+            }
+        } catch (ConcurrentModificationException ignored) {
         }
     }
 

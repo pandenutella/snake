@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-import static java.awt.Color.BLACK;
+import static java.awt.Color.WHITE;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -23,7 +23,7 @@ public class GameScreen extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.setColor(BLACK);
+        g.setColor(WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
 
         for (PaintLevel paintLevel : PaintLevel.values())

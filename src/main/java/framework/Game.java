@@ -12,6 +12,7 @@ import static java.lang.Thread.sleep;
 public class Game {
 
     private String name;
+    private int fps = 60;
     private GameScreen gameScreen;
     private ViewManager viewManager;
     private UpdateManager updateManager;
@@ -43,7 +44,7 @@ public class Game {
             gameScreen.repaint();
 
             try {
-                sleep(1000 / 60);
+                sleep(1000 / fps);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -52,6 +53,10 @@ public class Game {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setFps(int fps) {
+        this.fps = fps;
     }
 
     public ViewManager getViewManager() {
