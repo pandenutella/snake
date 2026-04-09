@@ -1,6 +1,8 @@
 package org.pandenutella.game.object;
 
+import lombok.Getter;
 import lombok.Setter;
+import org.pandenutella.game.constant.Direction;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,11 +11,13 @@ public class SnakeHead implements GameObject {
 
     private final int size;
 
-    private int x;
-    private int y;
-
+    @Getter
     @Setter
-    private GameObject back;
+    private int x;
+
+    @Getter
+    @Setter
+    private int y;
 
     public SnakeHead(int size, int x, int y) {
         this.size = size;
@@ -30,5 +34,22 @@ public class SnakeHead implements GameObject {
     public void render(Graphics g) {
         g.setColor(Color.DARK_GRAY);
         g.fillRect(x, y, size, size);
+    }
+
+    public void moveTowards(Direction direction) {
+        switch (direction) {
+            case UP:
+                y -= size;
+                break;
+            case RIGHT:
+                x += size;
+                break;
+            case DOWN:
+                y += size;
+                break;
+            case LEFT:
+                x -= size;
+                break;
+        }
     }
 }

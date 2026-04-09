@@ -1,6 +1,7 @@
 package org.pandenutella.game.object;
 
 import lombok.Data;
+import org.pandenutella.game.constant.Direction;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -13,18 +14,15 @@ public class Snake implements GameObject {
     private final SnakeHead head;
     private final List<SnakeBody> bodyList;
 
-    private int x;
-    private int y;
+    private Direction direction = Direction.UP;
 
     public Snake(int size, int x, int y, int length) {
         this.size = size;
-        this.x = x;
-        this.y = y;
-        this.head = this.initializeHead();
+        this.head = this.initializeHead(x, y);
         this.bodyList = this.initializeBody(length);
     }
 
-    private SnakeHead initializeHead() {
+    private SnakeHead initializeHead(int x, int y) {
         return new SnakeHead(size, x, y);
     }
 
@@ -37,17 +35,13 @@ public class Snake implements GameObject {
         int bodyCount = length - 1;
         SnakeBody front = null;
         for (int i = 1; i <= bodyCount; i++) {
-            int x = front == null ? this.x : front.getX();
+            int x = front == null ? head.getX() : front.getX();
 
-            int y = front == null ? this.y : front.getY();
+            int y = front == null ? head.getY() : front.getY();
             y += size;
 
             SnakeBody body = new SnakeBody(size, x, y);
-
-            if (front != null) {
-                body.setFront(front);
-                front.setBack(body);
-            }
+            body.setFront(front);
 
             bodyList.add(body);
             front = body;
@@ -58,7 +52,16 @@ public class Snake implements GameObject {
 
     @Override
     public void update() {
+        for (int i = bodyList.size() - 1; i >= 0; i--) {
+            SnakeBody body = bodyList.get(i);
+            SnakeBody front = body.getFront();
 
+            int x = front == null ? head.getX() : front.getX();
+            int y = front == null ? head.getY() : front.getY();
+            body.moveTo(x, y);
+        }
+
+        head.moveTowards(direction);
     }
 
     @Override

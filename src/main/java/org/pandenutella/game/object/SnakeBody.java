@@ -15,10 +15,9 @@ public class SnakeBody implements GameObject {
     @Getter
     private int y;
 
+    @Getter
     @Setter
     private SnakeBody front;
-    @Setter
-    private SnakeBody back;
 
     public SnakeBody(int size, int x, int y) {
         this.size = size;
@@ -35,5 +34,10 @@ public class SnakeBody implements GameObject {
     public void render(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(x, y, size, size);
+    }
+
+    public void moveTo(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }
