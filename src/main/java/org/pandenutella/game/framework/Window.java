@@ -1,16 +1,21 @@
 package org.pandenutella.game.framework;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-@RequiredArgsConstructor
 public class Window {
 
-    private final JFrame frame = new JFrame();
+    private final JFrame frame;
+    private final Panel panel;
 
-    public void setup(Panel panel) {
+    public Window(Panel panel) {
+        this.frame = new JFrame();
+        this.panel = panel;
+
+        this.setup();
+    }
+
+    public void setup() {
         frame.setTitle("Snake [Pan de Nutella]");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
