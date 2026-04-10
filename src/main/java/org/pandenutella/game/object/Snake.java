@@ -8,14 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Snake implements GameObject {
+public class Snake implements GameObject, DirectionControllable {
 
     private final int size;
     private final SnakeHead head;
     private final List<SnakeBody> bodyList;
 
     private Direction direction = Direction.UP;
-    private Direction nextDirection = Direction.UP;
 
     public Snake(int size, int x, int y, int length) {
         this.size = size;
@@ -62,7 +61,6 @@ public class Snake implements GameObject {
             body.moveTo(x, y);
         }
 
-        direction = nextDirection;
         head.moveTowards(direction);
     }
 
@@ -70,15 +68,5 @@ public class Snake implements GameObject {
     public void render(Graphics g) {
         bodyList.forEach(body -> body.render(g));
         head.render(g);
-    }
-
-    public void face(Direction direction) {
-        boolean nextDirectionAdjacent = ((this.direction == Direction.UP || this.direction == Direction.DOWN) && (direction == Direction.LEFT || direction == Direction.RIGHT)) ||
-                ((this.direction == Direction.RIGHT || this.direction == Direction.LEFT) && (direction == Direction.UP || direction == Direction.DOWN));
-        if (!nextDirectionAdjacent) {
-            return;
-        }
-
-        this.nextDirection = direction;
     }
 }

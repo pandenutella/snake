@@ -1,18 +1,17 @@
 package org.pandenutella.game.framework;
 
 import lombok.RequiredArgsConstructor;
-import org.pandenutella.game.object.GameObject;
+import org.pandenutella.game.object.Updatable;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 public class GameLoop implements Runnable {
 
-    private static final double MOVEMENT_PER_SECOND = 2.0;
-    private static final double NANO_PER_MOVEMENT = 1000000000 / MOVEMENT_PER_SECOND;
-
+    private final double movementPerSecond;
     private final Panel panel;
-    private final List<GameObject> gameObjectList;
+    private final List<? extends Updatable> controllerList;
+    private final List<? extends Updatable> gameObjectList;
 
     private boolean running;
 
@@ -39,7 +38,7 @@ public class GameLoop implements Runnable {
         while (running) {
             long currentNano = System.nanoTime();
 
-            if (currentNano - lastNano >= NANO_PER_MOVEMENT) {
+            if (currentNano - lastNano >= getNanoPerMovement()) {
                 update();
                 render();
 
@@ -48,8 +47,13 @@ public class GameLoop implements Runnable {
         }
     }
 
+    private double getNanoPerMovement() {
+        return 1000000000 / movementPerSecond;
+    }
+
     private void update() {
-        gameObjectList.forEach(GameObject::update);
+        controllerList.forEach(Updatable::update);
+        gameObjectList.forEach(Updatable::update);
     }
 
     private void render() {

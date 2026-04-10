@@ -1,0 +1,70 @@
+package org.pandenutella.game.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.pandenutella.game.constant.Direction;
+import org.pandenutella.game.object.DirectionControllable;
+
+import java.awt.event.KeyEvent;
+import java.util.Deque;
+import java.util.LinkedList;
+
+@RequiredArgsConstructor
+public class PlayerController implements GameController {
+
+    private final DirectionControllable directionControllable;
+    private final Deque<Direction> movementDeque = new LinkedList<>();
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        Direction direction = getDirection(e.getKeyCode());
+        if (direction == null) {
+            return;
+        }
+
+        movementDeque.remove(direction);
+        movementDeque.addFirst(direction);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        Direction direction = getDirection(e.getKeyCode());
+        if (direction == null) {
+            return;
+        }
+
+        movementDeque.remove(direction);
+    }
+
+    @Override
+    public void update() {
+        Direction nextDirection = getNextDirection();
+        directionControllable.setDirection(nextDirection);
+    }
+
+    private Direction getNextDirection() {
+        Direction currentDirection = directionControllable.getDirection();
+
+        for (Direction direction : movementDeque) {
+            if (currentDirection == direction || currentDirection.isAdjacent(direction)) {
+                return direction;
+            }
+        }
+
+        return currentDirection;
+    }
+
+    private Direction getDirection(int keyCode) {
+        return switch (keyCode) {
+            case KeyEvent.VK_UP -> Direction.UP;
+            case KeyEvent.VK_RIGHT -> Direction.RIGHT;
+            case KeyEvent.VK_DOWN -> Direction.DOWN;
+            case KeyEvent.VK_LEFT -> Direction.LEFT;
+            default -> null;
+        };
+    }
+}

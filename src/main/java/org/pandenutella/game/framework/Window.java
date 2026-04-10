@@ -1,21 +1,22 @@
 package org.pandenutella.game.framework;
 
+import org.pandenutella.game.controller.GameController;
+
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-import java.awt.event.KeyListener;
 import java.util.List;
 
 public class Window {
 
     private final JFrame frame;
     private final Panel panel;
-    private final List<KeyListener> keyListenerList;
+    private final List<GameController> gameControllerList;
 
-    public Window(Panel panel, List<KeyListener> keyListenerList) {
+    public Window(Panel panel, List<GameController> gameControllerList) {
         this.frame = new JFrame();
 
         this.panel = panel;
-        this.keyListenerList = keyListenerList;
+        this.gameControllerList = gameControllerList;
 
         this.setup();
     }
@@ -26,7 +27,7 @@ public class Window {
         frame.setResizable(false);
 
         frame.getContentPane().add(panel);
-        keyListenerList.forEach(frame::addKeyListener);
+        gameControllerList.forEach(frame::addKeyListener);
     }
 
     public void display() {
