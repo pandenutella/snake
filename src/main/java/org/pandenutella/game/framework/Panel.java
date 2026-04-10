@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Panel extends JPanel {
 
-    private static final Color BACKGROUND_COLOR = Color.WHITE;
+    private static final Color BACKGROUND_COLOR = Color.BLACK;
 
     private final List<GameObject> gameObjectList;
 

@@ -32,7 +32,7 @@ public class SnakeBody implements GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.LIGHT_GRAY);
         g.fillRect(x, y, size, size);
     }
 
