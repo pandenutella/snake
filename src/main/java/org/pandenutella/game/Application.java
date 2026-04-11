@@ -23,8 +23,9 @@ public class Application {
     public static void main(String[] args) {
         int snakeX = getInitialPosition(SCREEN_WIDTH);
         int snakeY = getInitialPosition(SCREEN_HEIGHT);
+        Dimension screenBounds = new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        Snake snake = new Snake(SNAKE_SIZE, snakeX, snakeY, SNAKE_LENGTH);
+        Snake snake = new Snake(SNAKE_SIZE, snakeX, snakeY, SNAKE_LENGTH, screenBounds);
 
         GameController playerController = new PlayerController(snake);
 

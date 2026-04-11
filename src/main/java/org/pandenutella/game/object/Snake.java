@@ -3,6 +3,7 @@ package org.pandenutella.game.object;
 import lombok.Data;
 import org.pandenutella.game.constant.Direction;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +14,19 @@ public class Snake implements GameObject, DirectionControllable {
     private final int size;
     private final SnakeHead head;
     private final List<SnakeBody> bodyList;
+    private final Dimension screenBounds;
 
     private Direction direction = Direction.UP;
 
-    public Snake(int size, int x, int y, int length) {
+    public Snake(int size, int x, int y, int length, Dimension screenBounds) {
         this.size = size;
-        this.head = this.initializeHead(x, y);
+        this.head = this.initializeHead(x, y, screenBounds);
         this.bodyList = this.initializeBody(length);
+        this.screenBounds = screenBounds;
     }
 
-    private SnakeHead initializeHead(int x, int y) {
-        return new SnakeHead(size, x, y);
+    private SnakeHead initializeHead(int x, int y, Dimension screenBounds) {
+        return new SnakeHead(size, x, y, screenBounds);
     }
 
     private List<SnakeBody> initializeBody(int length) {
@@ -52,6 +55,10 @@ public class Snake implements GameObject, DirectionControllable {
 
     @Override
     public void update() {
+        handleMovement();
+    }
+
+    private void handleMovement() {
         for (int i = bodyList.size() - 1; i >= 0; i--) {
             SnakeBody body = bodyList.get(i);
             SnakeBody front = body.getFront();
