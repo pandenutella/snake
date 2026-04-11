@@ -1,5 +1,7 @@
 package org.pandenutella.game.object.apple;
 
+import org.pandenutella.game.global.object.GridManager;
+import org.pandenutella.game.global.object.ObjectManager;
 import org.pandenutella.game.object.GameObject;
 import org.pandenutella.game.object.grid.CellPositioned;
 import org.pandenutella.game.utility.Position;
@@ -9,8 +11,6 @@ import java.awt.Graphics;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static org.pandenutella.game.manager.GridManager.getGlobalGridManager;
 
 public class AppleSpawner implements GameObject, CellPositioned {
 
@@ -23,7 +23,8 @@ public class AppleSpawner implements GameObject, CellPositioned {
         this.size = size;
         this.cooldownTimer = new StopWatch(cooldown);
 
-        getGlobalGridManager().addCellPositioned(this);
+        ObjectManager.getInstance().addGameObject(this);
+        GridManager.getInstance().addCellPositioned(this);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class AppleSpawner implements GameObject, CellPositioned {
     }
 
     private void spawnApple() {
-        List<Position> vacantPositionList = getGlobalGridManager().getVacantPositionList();
+        List<Position> vacantPositionList = GridManager.getInstance().getVacantPositionList();
         int randomIndex = vacantPositionList.size();
         Position randomVacantPosition = vacantPositionList.get(ThreadLocalRandom.current().nextInt(randomIndex));
 

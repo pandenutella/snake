@@ -1,23 +1,34 @@
 package org.pandenutella.game.framework;
 
-import org.pandenutella.game.object.GameObject;
+import lombok.Getter;
+import org.pandenutella.game.global.object.ObjectManager;
 
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.List;
 
 public class Panel extends JPanel {
 
     private static final Color BACKGROUND_COLOR = Color.BLACK;
 
-    private final List<GameObject> gameObjectList;
+    private static Panel INSTANCE;
 
-    public Panel(Dimension dimension, List<GameObject> gameObjectList) {
+    public static void initialize(Dimension dimension) {
+        INSTANCE = new Panel(dimension);
+    }
+
+    public static Panel getInstance() {
+        return INSTANCE;
+    }
+
+    @Getter
+    private final Dimension dimension;
+
+    public Panel(Dimension dimension) {
+        this.dimension = dimension;
+
         this.setPreferredSize(dimension);
-        this.gameObjectList = gameObjectList;
-
         this.setBackground(BACKGROUND_COLOR);
     }
 
@@ -28,6 +39,6 @@ public class Panel extends JPanel {
         g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        gameObjectList.forEach(gameObject -> gameObject.render(g));
+        ObjectManager.getInstance().getGameObjectList().forEach(gameObject -> gameObject.render(g));
     }
 }

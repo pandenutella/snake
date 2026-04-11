@@ -1,6 +1,5 @@
 package org.pandenutella.game.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.pandenutella.game.constant.Direction;
 import org.pandenutella.game.object.DirectionControllable;
 
@@ -8,15 +7,14 @@ import java.awt.event.KeyEvent;
 import java.util.Deque;
 import java.util.LinkedList;
 
-@RequiredArgsConstructor
-public class PlayerController implements GameController {
+public class SnakeController extends GameControllerImpl {
 
     private final DirectionControllable directionControllable;
     private final Deque<Direction> movementDeque = new LinkedList<>();
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-
+    public SnakeController(DirectionControllable directionControllable) {
+        super();
+        this.directionControllable = directionControllable;
     }
 
     @Override

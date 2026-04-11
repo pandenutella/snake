@@ -2,6 +2,8 @@ package org.pandenutella.game.object.snake;
 
 import lombok.Data;
 import org.pandenutella.game.constant.Direction;
+import org.pandenutella.game.global.object.GridManager;
+import org.pandenutella.game.global.object.ObjectManager;
 import org.pandenutella.game.object.DirectionControllable;
 import org.pandenutella.game.object.GameObject;
 import org.pandenutella.game.object.grid.CellPositioned;
@@ -11,8 +13,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.pandenutella.game.manager.GridManager.getGlobalGridManager;
 
 @Data
 public class Snake implements GameObject, DirectionControllable, CellPositioned {
@@ -30,7 +30,8 @@ public class Snake implements GameObject, DirectionControllable, CellPositioned 
         this.bodyList = this.initializeBody(length);
         this.screenBounds = screenBounds;
 
-        getGlobalGridManager().addCellPositioned(this);
+        ObjectManager.getInstance().addGameObject(this);
+        GridManager.getInstance().addCellPositioned(this);
     }
 
     private SnakeHead initializeHead(Position position, Dimension screenBounds) {

@@ -1,7 +1,8 @@
-package org.pandenutella.game.manager;
+package org.pandenutella.game.global.object;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.pandenutella.game.framework.Panel;
 import org.pandenutella.game.object.grid.CellPositioned;
 import org.pandenutella.game.utility.Position;
 
@@ -14,28 +15,31 @@ public class GridManager {
 
     private static GridManager INSTANCE;
 
-    public static GridManager getGlobalGridManager() {
-        if (INSTANCE == null) {
-            INSTANCE = new GridManager();
-        }
-        return INSTANCE;
+    public static void initialize(int cellSize) {
+        INSTANCE = new GridManager();
+        initializeScreenPositionList(cellSize);
     }
 
-    private final List<CellPositioned> cellPositionedList = new ArrayList<>();
-    private final List<Position> screenPositionList = new ArrayList<>();
+    private static void initializeScreenPositionList(int cellSize) {
+        INSTANCE.screenPositionList.clear();
 
-    public void initializeScreenPositionList(Dimension gridDimension, int cellSize) {
-        screenPositionList.clear();
-
+        Dimension gridDimension = Panel.getInstance().getDimension();
         int columns = gridDimension.width / cellSize;
         int rows = gridDimension.height / cellSize;
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                screenPositionList.add(new Position(c * cellSize, r * cellSize));
+                INSTANCE.screenPositionList.add(new Position(c * cellSize, r * cellSize));
             }
         }
     }
+
+    public static GridManager getInstance() {
+        return INSTANCE;
+    }
+
+    private final List<CellPositioned> cellPositionedList = new ArrayList<>();
+    private final List<Position> screenPositionList = new ArrayList<>();
 
     public void addCellPositioned(CellPositioned cellPositioned) {
         this.cellPositionedList.add(cellPositioned);
