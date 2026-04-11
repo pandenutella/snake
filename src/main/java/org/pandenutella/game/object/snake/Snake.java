@@ -1,11 +1,15 @@
 package org.pandenutella.game.object.snake;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.pandenutella.game.constant.Direction;
 import org.pandenutella.game.global.object.GridManager;
-import org.pandenutella.game.global.object.ObjectManager;
 import org.pandenutella.game.object.DirectionControllable;
 import org.pandenutella.game.object.GameObject;
+import org.pandenutella.game.object.apple.Apple;
+import org.pandenutella.game.object.eat.Eater;
+import org.pandenutella.game.object.eat.EatingManager;
+import org.pandenutella.game.object.eat.Food;
 import org.pandenutella.game.object.grid.CellPositioned;
 import org.pandenutella.game.utility.Position;
 
@@ -15,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Snake implements GameObject, DirectionControllable, CellPositioned {
+@EqualsAndHashCode(callSuper = true)
+public class Snake extends GameObject implements DirectionControllable, CellPositioned, Eater {
 
     private final int size;
     private final SnakeHead head;
@@ -23,15 +28,18 @@ public class Snake implements GameObject, DirectionControllable, CellPositioned 
     private final Dimension screenBounds;
 
     private Direction direction = Direction.UP;
+    private boolean grow = false;
 
     public Snake(int size, Position position, int length, Dimension screenBounds) {
+        super();
+
         this.size = size;
         this.head = this.initializeHead(position, screenBounds);
         this.bodyList = this.initializeBody(length);
         this.screenBounds = screenBounds;
 
-        ObjectManager.getInstance().addGameObject(this);
         GridManager.getInstance().addCellPositioned(this);
+        EatingManager.getInstance().addEater(this);
     }
 
     private SnakeHead initializeHead(Position position, Dimension screenBounds) {
@@ -64,10 +72,13 @@ public class Snake implements GameObject, DirectionControllable, CellPositioned 
 
     @Override
     public void update() {
-        handleMovement();
-    }
+        SnakeBody newBody = null;
+        if (grow) {
+            SnakeBody lastBody = bodyList.get(bodyList.size() - 1);
+            newBody = new SnakeBody(size, Position.copy(lastBody.getPosition()));
+            newBody.setFront(lastBody);
+        }
 
-    private void handleMovement() {
         for (int i = bodyList.size() - 1; i >= 0; i--) {
             SnakeBody body = bodyList.get(i);
             SnakeBody front = body.getFront();
@@ -77,6 +88,11 @@ public class Snake implements GameObject, DirectionControllable, CellPositioned 
         }
 
         head.moveTowards(direction);
+
+        if (grow) {
+            bodyList.add(newBody);
+            grow = false;
+        }
     }
 
     @Override
@@ -95,5 +111,20 @@ public class Snake implements GameObject, DirectionControllable, CellPositioned 
                 .toList());
 
         return positionList;
+    }
+
+    @Override
+    public List<Class<? extends Food>> getFoodList() {
+        return List.of(Apple.class);
+    }
+
+    @Override
+    public void eat(Food food) {
+        grow = true;
+    }
+
+    @Override
+    public Position getPosition() {
+        return head.getPosition();
     }
 }

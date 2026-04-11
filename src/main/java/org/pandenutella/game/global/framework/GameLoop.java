@@ -1,9 +1,13 @@
 package org.pandenutella.game.global.framework;
 
 import lombok.RequiredArgsConstructor;
+import org.pandenutella.game.constant.UpdatePriority;
 import org.pandenutella.game.framework.Panel;
 import org.pandenutella.game.global.object.ObjectManager;
 import org.pandenutella.game.object.Updatable;
+
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class GameLoop implements Runnable {
@@ -62,8 +66,11 @@ public class GameLoop implements Runnable {
     }
 
     private void update() {
-        ObjectManager.getInstance().getGameControllerList().forEach(Updatable::update);
-        ObjectManager.getInstance().getGameObjectList().forEach(Updatable::update);
+        Map<UpdatePriority, List<Updatable>> priorityUpdatableListMap = ObjectManager.getInstance().getPriorityUpdatableListMap();
+        priorityUpdatableListMap.get(UpdatePriority.INPUT).forEach(Updatable::update);
+        priorityUpdatableListMap.get(UpdatePriority.PRE_PROCESS).forEach(Updatable::update);
+        priorityUpdatableListMap.get(UpdatePriority.GAME_OBJECT).forEach(Updatable::update);
+        priorityUpdatableListMap.get(UpdatePriority.POST_PROCESS).forEach(Updatable::update);
     }
 
     private void render() {

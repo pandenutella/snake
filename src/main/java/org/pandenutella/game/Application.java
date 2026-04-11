@@ -5,7 +5,8 @@ import org.pandenutella.game.framework.Panel;
 import org.pandenutella.game.framework.Window;
 import org.pandenutella.game.global.framework.GameLoop;
 import org.pandenutella.game.global.object.GridManager;
-import org.pandenutella.game.object.apple.AppleSpawner;
+import org.pandenutella.game.object.apple.Apple;
+import org.pandenutella.game.object.eat.EatingManager;
 import org.pandenutella.game.object.snake.Snake;
 import org.pandenutella.game.utility.Position;
 
@@ -17,7 +18,7 @@ public class Application {
     private static final int SCREEN_HEIGHT = 540;
     private static final int SNAKE_SIZE = 60;
     private static final int SNAKE_LENGTH = 3;
-    private static final double SNAKE_MOVEMENT = 2.0;
+    private static final double SNAKE_MOVEMENT = 6.0;
 
     public static void main(String[] args) {
         Dimension screenBounds = new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -29,9 +30,15 @@ public class Application {
         Window.initialize();
         Window.display();
 
+        initializeGameProcesses();
         initializeGameObjects(screenBounds);
 
         GameLoop.start();
+    }
+
+    private static void initializeGameProcesses() {
+        // Processes
+        EatingManager.initialize();
     }
 
     private static void initializeGameObjects(Dimension screenBounds) {
@@ -40,7 +47,7 @@ public class Application {
         Snake snake = new Snake(SNAKE_SIZE, snakePosition, SNAKE_LENGTH, screenBounds);
         new SnakeController(snake);
         // Apple Spawner
-        new AppleSpawner(SNAKE_SIZE, 2);
+        new Apple(SNAKE_SIZE);
     }
 
     private static int getInitialPosition(int screenSize) {

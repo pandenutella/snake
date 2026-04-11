@@ -2,14 +2,13 @@ package org.pandenutella.game.object.snake;
 
 import lombok.Getter;
 import org.pandenutella.game.constant.Direction;
-import org.pandenutella.game.object.GameObject;
 import org.pandenutella.game.utility.Position;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-public class SnakeHead implements GameObject {
+public class SnakeHead {
 
     private final int size;
     private final Dimension screenBounds;
@@ -23,12 +22,6 @@ public class SnakeHead implements GameObject {
         this.screenBounds = screenBounds;
     }
 
-    @Override
-    public void update() {
-
-    }
-
-    @Override
     public void render(Graphics g) {
         g.setColor(Color.WHITE);
         g.fillRect(position.getX(), position.getY(), size, size);

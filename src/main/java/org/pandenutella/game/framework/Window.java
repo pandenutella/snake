@@ -1,10 +1,10 @@
 package org.pandenutella.game.framework;
 
-import org.pandenutella.game.controller.GameController;
 import org.pandenutella.game.global.framework.GameLoop;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -47,7 +47,7 @@ public class Window {
         frame.getContentPane().add(panel);
     }
 
-    public void addGameController(GameController gameController) {
-        frame.addKeyListener(gameController);
+    public void addKeyListener(KeyListener keyListener) {
+        frame.addKeyListener(keyListener);
     }
 }

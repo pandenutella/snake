@@ -39,6 +39,11 @@ public class Panel extends JPanel {
         g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        ObjectManager.getInstance().getGameObjectList().forEach(gameObject -> gameObject.render(g));
+        ObjectManager.getInstance().getRenderableList().forEach(renderable -> {
+            try {
+                renderable.render(g);
+            } catch (Exception ignored) {
+            }
+        });
     }
 }

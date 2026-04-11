@@ -1,7 +1,11 @@
 package org.pandenutella.game.object;
 
-import java.awt.Graphics;
+import org.pandenutella.game.constant.UpdatePriority;
+import org.pandenutella.game.global.object.ObjectManager;
 
-public interface GameObject extends Updatable {
-    void render(Graphics g);
+public abstract class GameObject implements Updatable, Renderable {
+    public GameObject() {
+        ObjectManager.getInstance().addUpdatable(UpdatePriority.GAME_OBJECT, this);
+        ObjectManager.getInstance().addRenderable(this);
+    }
 }
