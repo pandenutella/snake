@@ -32,12 +32,7 @@ public class PlayerController implements GameController {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Direction direction = getDirection(e.getKeyCode());
-        if (direction == null) {
-            return;
-        }
 
-        movementDeque.remove(direction);
     }
 
     @Override
