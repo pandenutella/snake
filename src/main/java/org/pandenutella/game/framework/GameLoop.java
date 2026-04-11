@@ -14,6 +14,7 @@ public class GameLoop implements Runnable {
     private final List<? extends Updatable> gameObjectList;
 
     private boolean running;
+    private Thread thread;
 
     public void start() {
         if (running) {
@@ -23,12 +24,18 @@ public class GameLoop implements Runnable {
         running = true;
         System.out.println("Game loop starts");
 
-        Thread thread = new Thread(this);
+        thread = new Thread(this);
         thread.start();
     }
 
     public void stop() {
         running = false;
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

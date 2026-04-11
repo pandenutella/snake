@@ -4,6 +4,8 @@ import org.pandenutella.game.controller.GameController;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 public class Window {
@@ -35,5 +37,14 @@ public class Window {
         frame.pack();
 
         frame.setLocationRelativeTo(null);
+    }
+
+    public void setGameLoop(GameLoop gameLoop) {
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                gameLoop.stop();
+            }
+        });
     }
 }

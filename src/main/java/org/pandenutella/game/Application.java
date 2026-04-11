@@ -40,6 +40,8 @@ public class Application {
 
         GameLoop gameLoop = new GameLoop(SNAKE_MOVEMENT, panel, controllerList, gameObjectList);
         gameLoop.start();
+
+        window.setGameLoop(gameLoop);
     }
 
     private static int getInitialPosition(int screenSize) {
