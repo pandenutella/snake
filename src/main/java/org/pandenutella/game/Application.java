@@ -6,6 +6,7 @@ import org.pandenutella.game.framework.Window;
 import org.pandenutella.game.global.framework.GameLoop;
 import org.pandenutella.game.global.object.GridManager;
 import org.pandenutella.game.object.apple.Apple;
+import org.pandenutella.game.object.collision.CollisionManager;
 import org.pandenutella.game.object.eat.EatingManager;
 import org.pandenutella.game.object.snake.Snake;
 import org.pandenutella.game.utility.Position;
@@ -39,6 +40,7 @@ public class Application {
     private static void initializeGameProcesses() {
         // Processes
         EatingManager.initialize();
+        CollisionManager.initialize();
     }
 
     private static void initializeGameObjects(Dimension screenBounds) {

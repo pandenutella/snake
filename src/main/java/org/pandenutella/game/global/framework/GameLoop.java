@@ -33,10 +33,12 @@ public class GameLoop implements Runnable {
     public static void stop() {
         INSTANCE.running = false;
 
-        try {
-            INSTANCE.thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (Thread.currentThread() != INSTANCE.thread) {
+            try {
+                INSTANCE.thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

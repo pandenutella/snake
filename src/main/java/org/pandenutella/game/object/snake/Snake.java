@@ -3,10 +3,14 @@ package org.pandenutella.game.object.snake;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.pandenutella.game.constant.Direction;
+import org.pandenutella.game.global.framework.GameLoop;
 import org.pandenutella.game.global.object.GridManager;
 import org.pandenutella.game.object.DirectionControllable;
 import org.pandenutella.game.object.GameObject;
 import org.pandenutella.game.object.apple.Apple;
+import org.pandenutella.game.object.collision.Collidee;
+import org.pandenutella.game.object.collision.Collider;
+import org.pandenutella.game.object.collision.CollisionManager;
 import org.pandenutella.game.object.eat.Eater;
 import org.pandenutella.game.object.eat.EatingManager;
 import org.pandenutella.game.object.eat.Food;
@@ -20,7 +24,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Snake extends GameObject implements DirectionControllable, CellPositioned, Eater {
+public class Snake extends GameObject implements DirectionControllable, CellPositioned, Eater, Collider {
 
     private final int size;
     private final SnakeHead head;
@@ -40,6 +44,7 @@ public class Snake extends GameObject implements DirectionControllable, CellPosi
 
         GridManager.getInstance().addCellPositioned(this);
         EatingManager.getInstance().addEater(this);
+        CollisionManager.getInstance().addCollider(this);
     }
 
     private SnakeHead initializeHead(Position position, Dimension screenBounds) {
@@ -126,5 +131,15 @@ public class Snake extends GameObject implements DirectionControllable, CellPosi
     @Override
     public Position getPosition() {
         return head.getPosition();
+    }
+
+    @Override
+    public List<Class<? extends Collidee>> getCollideeList() {
+        return List.of(SnakeBody.class);
+    }
+
+    @Override
+    public void collide(Collidee collidee) {
+        GameLoop.stop();
     }
 }
