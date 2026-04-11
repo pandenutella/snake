@@ -43,25 +43,25 @@ public class SnakeHead implements GameObject {
         switch (direction) {
             case UP:
                 y -= size;
-                if (y <= 0) {
+                if (y < 0) {
                     y += screenBounds.height;
                 }
                 break;
             case RIGHT:
                 x += size;
-                if (x >= screenBounds.width) {
+                if (x > screenBounds.width - size) {
                     x -= screenBounds.width;
                 }
                 break;
             case DOWN:
                 y += size;
-                if (y >= screenBounds.height) {
+                if (y > screenBounds.height - size) {
                     y -= screenBounds.height;
                 }
                 break;
             case LEFT:
                 x -= size;
-                if (x <= 0) {
+                if (x < 0) {
                     x += screenBounds.width;
                 }
                 break;

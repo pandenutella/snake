@@ -14,9 +14,9 @@ import java.util.List;
 
 public class Application {
 
-    private static final int SCREEN_WIDTH = 600;
-    private static final int SCREEN_HEIGHT = 600;
-    private static final int SNAKE_SIZE = 30;
+    private static final int SCREEN_WIDTH = 540;
+    private static final int SCREEN_HEIGHT = 540;
+    private static final int SNAKE_SIZE = 60;
     private static final int SNAKE_LENGTH = 3;
     private static final double SNAKE_MOVEMENT = 2.0;
 
